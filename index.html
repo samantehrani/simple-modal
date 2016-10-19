@@ -10,15 +10,17 @@
 </head>
 
 <body>
-    <button class="modal" data-modal-content="panel-a">Open Modal</button>
-    <button class="modal" data-modal-content="panel-b">Open Modal</button>
-    <div id="modal-panel"></div>
-
-    <div class="content" id="panel-a">
-        HELLO
+    <button data-modal='{"contentId":"panel-a"}'>Open Modal</button>
+    <button data-modal='{"contentId":"panel-b"}'>Open Modal</button>
+    <div data-modal-content="panel-a">
+        <div id="a-content">
+            HELLO
+        </div>
     </div>
-    <div class="content" id="panel-b">
-        BYE
+    <div data-modal-content="panel-b">
+        <div id="b-content">
+            BYE
+        </div>
     </div>
 
     <script type="text/javascript" src="scripts/simple-modal.js" async></script>
