@@ -1,12 +1,17 @@
 let modals = document.querySelectorAll('.modal');
-let modalPanel = document.querySelector('#modal-panel');
-modalPanel.addEventListener('click', function(e) {
-    if (e.target === this)
-        modalPanel.style.display = "none";
+let modalPanels = document.querySelectorAll('.modal-panel');
+for (modalPanel of modalPanels) {
+    modalPanel.addEventListener('click', function(e) {
+        if (e.target === this)
+            this.style.display = "none";
+    }, false);
+}
 
-}, false);
 for (let modal of modals) {
     modal.addEventListener('click', function() {
+        let contentId = this.id;
+        console.log(contentId);
+        let modalPanel = document.querySelector(`#${contentId}.modal-panel`);
         modalPanel.style.display = "flex";
     }, false);
 }
