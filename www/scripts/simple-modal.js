@@ -1,24 +1,20 @@
-//what if we wanted to have limitless modals?
-//what if we wanted to have chained modals?
-//what if we wanted different sizes?
-//what if the content was from another file?
-//what if we wanted other methods for closing/opening the modal?
-//what if we wanted the user to be able to use arbitrary selectors names?
 class SimpleModal {
     constructor(cas = 'modal') {
         this.contentAttributeSelector = cas;
         this.contentAttribute = cas.replace(/(\-\w)/g, (m) => m[1].toUpperCase());
 
-        this.modalPanel = document.createElement('div');
-        this.modalPanel.setAttribute('id', `${this.contentAttributeSelector}-layer`);
-
         this.stylesheet = this.addStyleSheet();
         this.registerModals();
+    }
+    buildModal() {
+        this.modalPanel = document.createElement('div');
+        this.modalPanel.setAttribute('id', `${this.contentAttributeSelector}-layer`);
     }
     addStyleSheet() {
         var style = document.createElement("style");
         style.appendChild(document.createTextNode(`#${this.contentAttributeSelector}-layer {
                                                         position: fixed;
+                                                        display: flex;
                                                         justify-content: center;
                                                         align-items: center;
                                                         top: 0;
@@ -35,6 +31,7 @@ class SimpleModal {
     }
     registerModals() {
         let modals = document.querySelectorAll(`[data-${this.contentAttributeSelector}]`);
+        console.log(modals);
         for (let modal of modals) {
             modal.addEventListener('click', (evnt) => this.handleClick(evnt), false);
         }
@@ -45,17 +42,45 @@ class SimpleModal {
         return JSON.parse(str);
     }
     handleClick(evnt) {
-        this.openModal(this.parseOptions(evnt.target.dataset[this.contentAttribute]));
+        let options = this.parseOptions(evnt.target.dataset[this.contentAttribute]);
+        this.openModal(options);
+    }
+
+    modalClickHandler(evnt) {
+        evnt.stopPropagation();
+        if (evnt.target === this.modalPanel) {
+            this.closeModal();
+        }
     }
     openModal(options) {
-        console.log(options);
+        this.closeModal();
         let content;
+        this.buildModal();
         if (options.contentId) {
             let contentHolderNode = document.querySelector(`[data-${this.contentAttributeSelector}-content=${options.contentId}]`);
             content = contentHolderNode.innerHTML || 'No Content Found!';
+            this.modalPanel.innerHTML = content;
+        } else if (options.contentURL) {
+            //load the url
+            fetch(options.contentURL).then(function(response) {
+                return response.text();
+            }).then(function(text) {
+                document.querySelector('#modal-layer').innerHTML = text;
+            });
         }
-        this.modalPanel.innerHTML = content;
-        document.body.appendChild(this.modalPanel);
 
+
+        //take care of closing logic
+        document.body.appendChild(this.modalPanel);
+        this.modalPanel.addEventListener('click', (evnt) => this.modalClickHandler(evnt, this.modalPanel));
+
+        this.registerModals();
     }
+    closeModal() {
+        if (this.modalPanel) {
+            document.body.removeChild(this.modalPanel);
+            this.modalPanel = null;
+        }
+    }
+
 }
