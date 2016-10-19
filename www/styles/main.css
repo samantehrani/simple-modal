@@ -1,0 +1,10 @@
+#b-content {
+    background-color: rgba(0, 0, 255, 1);
+    max-width: 60%;
+}
+
+#c-content {
+    background-color: rgba(255, 0, 255, 1);
+    width: 500px;
+    height: 200px;
+}
