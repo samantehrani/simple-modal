@@ -1,4 +1,4 @@
-.modal-panel {
+#modal-panel {
     display: none;
     position: fixed;
     justify-content: center;
@@ -10,13 +10,21 @@
     background-color: rgba(0, 0, 0, 0.7);
 }
 
-#panel-a.modal-panel>.content {
+.content {
+    display: none;
+}
+
+.content.open {
+    display: block;
+}
+
+#panel-a.content {
     background-color: rgba(255, 255, 255, 1);
     width: 80%;
     height: 80%;
 }
 
-#panel-b.modal-panel>.content {
+#panel-b.content {
     background-color: rgba(0, 0, 255, 1);
     width: 80%;
     height: 80%;
